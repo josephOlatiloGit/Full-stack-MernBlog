@@ -5,7 +5,7 @@ import { errorHandler } from "./errorHandler.js";
  * Here we wanna verify the token from the user before they can update their profile info.
  * so we make use of this function to secure the user routes the route
  */
-// console.log(token);
+
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token;
   if (!token) {
