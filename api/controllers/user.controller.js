@@ -22,6 +22,8 @@ export const updateUser = async (req, res, next) => {
     }
     req.body.password = bycryptjs.hashSync(req.body.password, 10);
   }
+
+  // username validation checks:
   if (req.body.username) {
     if (req.body.username.length < 7 || req.body.username > 20) {
       return next(errorHandler(400, "Username must be 7 to 20 characters "));
@@ -38,6 +40,8 @@ export const updateUser = async (req, res, next) => {
         errorHandler(400, "Username can only contain lowercase and numbers")
       );
     }
+  }
+// profile update:
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.userId,
@@ -54,11 +58,32 @@ export const updateUser = async (req, res, next) => {
         },
         { new: true }
       );
-
       const { password, ...rest } = updatedUser._doc;
-      res.status(200).json(rest);
+      return res.status(200).json(rest);
     } catch (error) {
       next(error);
+      return
     }
+  
   }
-};
+
+
+
+
+
+    // // Store the timestamp when the password was updated
+      // req.user.lastPasswordUpdate = Date.now();
+      // await req.user.save();
+  
+
+    // // Check if the user is updating the email
+    // if (req.body.email) {
+    //   // Ensure 24 hours have passed since the last password update
+    //   const timeSinceLastPasswordUpdate = Date.now() - req.user.lastPasswordUpdate;
+    //   const hoursPassed = timeSinceLastPasswordUpdate / (1000 * 60 * 60);
+    //   if (hoursPassed < 24) {
+    //     return next(
+    //       errorHandler(400, "You can only update your email after 24 hours since the last password change")
+    //     );
+    //   }
+    // 

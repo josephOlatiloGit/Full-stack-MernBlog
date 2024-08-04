@@ -27,7 +27,7 @@ export const signup = async (req, res, next) => {
   });
   try {
     await newUser.save();
-    res.json("Signup successful");
+   return res.json("Signup successful");
   } catch (error) {
     next(error);
   }
@@ -55,7 +55,7 @@ export const signin = async (req, res, next) => {
     // remove the password from the response to client
     const { password: pass, ...rest } = validUser._doc;
 
-    res
+     res
       .status(200)
       .cookie("access_token", token, { httpOnly: true, maxAge: 360000 })
       .json(rest);
@@ -72,13 +72,14 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password, ...rest } = user._doc;
       // console.log(user);
-      res
+      return res
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
           maxAge: 36000,
         })
         .json(rest);
+       
     } else {
       /**
        * Here we only have the email as the user credential but in our model we require username and password. so we need to create a random password and username for the user.
@@ -87,6 +88,7 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+
       const newUser = new User({
         username:
           name.toLowerCase().split(" ").join("") +
@@ -95,10 +97,12 @@ export const google = async (req, res, next) => {
         password: hashedPassword,
         profilePicture: googlePhotoUrl,
       });
+
       await newUser.save();
+
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password, ...rest } = newUser._doc;
-      res
+      return res
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
@@ -106,8 +110,8 @@ export const google = async (req, res, next) => {
         })
         .json(rest);
     }
-    console.log(newUser);
   } catch (error) {
     next(error);
+    return
   }
 };

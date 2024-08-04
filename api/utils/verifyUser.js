@@ -12,11 +12,12 @@ export const verifyToken = (req, res, next) => {
     return next(errorHandler(401, "Unauthorized"));
   }
   jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
-    if (err) {
-      return next(401("Unauthorized"));
+    if (error) {
+      return next(errorHandler(401, "Unauthorized"));
     }
     req.user = user;
     next();
+    
     /**
      * if the token is valid, then we
      * wanna send the user req along with the body.
