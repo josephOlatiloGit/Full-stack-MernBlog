@@ -104,7 +104,7 @@ export default function DashProfile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // console.log(formData)
+  
 
   /**
    * We check if the object is empty
