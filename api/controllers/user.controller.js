@@ -64,11 +64,7 @@ export const updateUser = async (req, res, next) => {
       next(error);
       return
     }
-  
   }
-
-
-
 
 
     // // Store the timestamp when the password was updated
@@ -76,6 +72,7 @@ export const updateUser = async (req, res, next) => {
       // await req.user.save();
   
 
+      
     // // Check if the user is updating the email
     // if (req.body.email) {
     //   // Ensure 24 hours have passed since the last password update
@@ -87,3 +84,16 @@ export const updateUser = async (req, res, next) => {
     //     );
     //   }
     // 
+
+
+    export const deleteUser = async (req, res, next)=>{
+        if(req.user.id !== req.params.userId){
+          return next(403, "You are not allowed to delete this user")
+        }
+        try {
+          await User.findByIdAndDelete(req.params.userId)
+          res.status(200).json({message: "User has been deleted"})
+        } catch (error) {
+          next(error)
+        }
+    }
