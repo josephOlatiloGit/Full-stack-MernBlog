@@ -41,59 +41,70 @@ export const updateUser = async (req, res, next) => {
       );
     }
   }
-// profile update:
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.userId,
-        {
-          /**
-           * The set method allow us to only update the single params listed from the body.
-           */
-          $set: {
-            username: req.body.username,
-            email: req.body.email,
-            profilePicture: req.body.profilePicture,
-            password: req.body.password,
-          },
+  // profile update:
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        /**
+         * The set method allow us to only update the single params listed from the body.
+         */
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          profilePicture: req.body.profilePicture,
+          password: req.body.password,
         },
-        { new: true }
-      );
-      const { password, ...rest } = updatedUser._doc;
-      return res.status(200).json(rest);
-    } catch (error) {
-      next(error);
-      return
-    }
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
+    return res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+    return;
   }
+};
 
+// // Store the timestamp when the password was updated
+// req.user.lastPasswordUpdate = Date.now();
+// await req.user.save();
 
-    // // Store the timestamp when the password was updated
-      // req.user.lastPasswordUpdate = Date.now();
-      // await req.user.save();
-  
+// // Check if the user is updating the email
+// if (req.body.email) {
+//   // Ensure 24 hours have passed since the last password update
+//   const timeSinceLastPasswordUpdate = Date.now() - req.user.lastPasswordUpdate;
+//   const hoursPassed = timeSinceLastPasswordUpdate / (1000 * 60 * 60);
+//   if (hoursPassed < 24) {
+//     return next(
+//       errorHandler(400, "You can only update your email after 24 hours since the last password change")
+//     );
+//   }
+//
 
-      
-    // // Check if the user is updating the email
-    // if (req.body.email) {
-    //   // Ensure 24 hours have passed since the last password update
-    //   const timeSinceLastPasswordUpdate = Date.now() - req.user.lastPasswordUpdate;
-    //   const hoursPassed = timeSinceLastPasswordUpdate / (1000 * 60 * 60);
-    //   if (hoursPassed < 24) {
-    //     return next(
-    //       errorHandler(400, "You can only update your email after 24 hours since the last password change")
-    //     );
-    //   }
-    // 
+// Delete User:
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(403, "You are not allowed to delete this user");
+  }
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json({ message: "User has been deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
 
+// Sign out User:
 
-    export const deleteUser = async (req, res, next)=>{
-        if(req.user.id !== req.params.userId){
-          return next(403, "You are not allowed to delete this user")
-        }
-        try {
-          await User.findByIdAndDelete(req.params.userId)
-          res.status(200).json({message: "User has been deleted"})
-        } catch (error) {
-          next(error)
-        }
-    }
+export const signOut = (req, res, next) => {
+  try {
+    return res
+      .cookie("access_token")
+      .status(200)
+      .json("User has been signed out");
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
