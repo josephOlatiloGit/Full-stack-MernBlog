@@ -20,6 +20,7 @@ import {
   signOutSuccess,
 } from "../redux/user/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 /**
  * NOTE WE USE OUR REDUX REDUCER TO MANAGE ALL OUR CRUDE OPERATIONS:
@@ -33,7 +34,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
  */
 
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -142,7 +143,7 @@ export default function DashProfile() {
       const data = await res.json();
       if (!res.ok) {
         dispatch(updateFailure(data.message));
-        setUpdateUserError(error.data.message);
+        setUpdateUserError(data.message);
         return;
       } else {
         dispatch(updateSuccess(data));
@@ -150,13 +151,12 @@ export default function DashProfile() {
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
-      setUpdateUserError("error.message");
+      setUpdateUserError(error.message);
     }
   };
 
   const handleDelete = async () => {
     setShowModal(false);
-
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
@@ -265,10 +265,22 @@ export default function DashProfile() {
           type="submit"
           gradientDuoTone={"purpleToBlue"}
           outline
-          className="uppercase"
+          disabled={loading || imageFileUploading}
+          // className="uppercase"
         >
-          Update
+          {loading ? "Loading..." : "Update"}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type="button"
+              gradientDuoTone={"purpleToPink"}
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-600 flex justify-between mt-5 ">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
@@ -288,11 +300,11 @@ export default function DashProfile() {
           {updateUserError}
         </Alert>
       )}
-      {error && (
+      {/* {error && (
         <Alert color={"failure"} className="mt-5">
           {error}
         </Alert>
-      )}
+      )} */}
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}
