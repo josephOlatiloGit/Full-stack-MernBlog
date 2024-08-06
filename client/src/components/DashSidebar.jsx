@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { signOutSuccess } from "../redux/user/userSlice";
 
 /**
- * NOTE: You can not have an <a> tag as a descendant to another <a> tag. so to clear this error we set the descendant <a> tag as="div"
+ * NOTE: You can not have an <a> tag as a descendant to another
+ * <a> tag. so to clear this error we set the descendant <a> tag as="div"
  *
  */
 

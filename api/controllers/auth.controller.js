@@ -27,7 +27,7 @@ export const signup = async (req, res, next) => {
   });
   try {
     await newUser.save();
-   return res.json("Signup successful");
+    return res.json("Signup successful");
   } catch (error) {
     next(error);
   }
@@ -49,13 +49,16 @@ export const signin = async (req, res, next) => {
     if (!validPassword) {
       return next(errorHandler(404, "Invalid credentials"));
     }
-    // auth the signin with jwt
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    // auth the signin with jwt, adding is Admin prop
+    const token = jwt.sign(
+      { id: validUser._id, isAdmin: validUser.isAdmin },
+      process.env.JWT_SECRET
+    );
 
     // remove the password from the response to client
     const { password: pass, ...rest } = validUser._doc;
 
-     res
+    res
       .status(200)
       .cookie("access_token", token, { httpOnly: true, maxAge: 360000 })
       .json(rest);
@@ -69,7 +72,10 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET
+      );
       const { password, ...rest } = user._doc;
       // console.log(user);
       return res
@@ -79,7 +85,6 @@ export const google = async (req, res, next) => {
           maxAge: 36000,
         })
         .json(rest);
-       
     } else {
       /**
        * Here we only have the email as the user credential but in our model we require username and password. so we need to create a random password and username for the user.
@@ -99,8 +104,12 @@ export const google = async (req, res, next) => {
       });
 
       await newUser.save();
-
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      /**
+       * Add isAdmin for the user */
+      const token = jwt.sign(
+        { id: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.JWT_SECRET
+      );
       const { password, ...rest } = newUser._doc;
       return res
         .status(200)
@@ -112,6 +121,6 @@ export const google = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
-    return
+    return;
   }
 };
