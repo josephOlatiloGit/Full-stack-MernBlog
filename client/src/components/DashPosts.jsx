@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Table, TableCell, TableHeadCell } from "flowbite-react";
 
-/**For the Post Page UI we install a package called scroll bar from tailwind Css */
+/**For the Post Page UI we install a package called
+ *  scroll bar from tailwind Css
+ * We also need to add the show more button functionality.
+ *  */
 
 export default function DashPosts() {
   const [userPosts, setUserPosts] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-  console.log(userPosts);
+  const [showMore, setShowMore] = useState(true);
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -16,6 +19,9 @@ export default function DashPosts() {
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
+          if (data.posts.length < 9) {
+            setShowMore(false);
+          }
           return;
         }
       } catch (error) {
@@ -26,6 +32,25 @@ export default function DashPosts() {
       fetchPost();
     }
   }, [currentUser._id]);
+
+  // Show More function:
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+    try {
+      const res = await fetch(
+        `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setUserPosts((prev) => [...prev, ...data.posts]);
+        if (data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100  scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
@@ -83,6 +108,14 @@ export default function DashPosts() {
               </Table.Body>
             ))}
           </Table>
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="w-full text-teal-500 self-center text-sm py-7 "
+            >
+              Show more
+            </button>
+          )}
         </>
       ) : (
         <p>You have no post</p>
