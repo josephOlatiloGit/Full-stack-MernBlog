@@ -44,6 +44,7 @@ export const create = async (req, res, next) => {
 // THIS CODE WILL RETURN A SERVER ERROR : source.toObject is not a function
 // The Post model should be used to interact with the database, not to construct query objects directly.
 //
+
 //     const posts = await Post.find({
 //       ...Post(req.query.userId && { userId: req.query.userId }),
 //       ...Post(req.query.category && { category: req.query.category }),
