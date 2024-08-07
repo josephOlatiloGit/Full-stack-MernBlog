@@ -77,7 +77,7 @@ export const google = async (req, res, next) => {
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
-      // console.log(user);
+
       return res
         .status(200)
         .cookie("access_token", token, {

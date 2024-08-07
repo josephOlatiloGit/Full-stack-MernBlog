@@ -13,7 +13,7 @@ export const create = async (req, res, next) => {
     .split(" ")
     .join("-")
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9]/g, "");
+    .replace(/[^a-zA-Z0-9]/g, "-");
   const newPost = new Post({
     ...req.body,
     slug,
@@ -25,6 +25,5 @@ export const create = async (req, res, next) => {
     return res.status(201).json(savedPost);
   } catch (error) {
     next(error);
-    return;
   }
 };
