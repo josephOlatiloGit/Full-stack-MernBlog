@@ -169,7 +169,7 @@ export const updatePost = async (req, res, next) => {
           title: req.body.title,
           content: req.body.content,
           category: req.body.category,
-          image: req.body.image,
+          image: req.body.image,   
         },
       },
       { new: true }
