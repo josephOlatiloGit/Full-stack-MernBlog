@@ -83,9 +83,11 @@ export const updateUser = async (req, res, next) => {
 //   }
 //
 
-// Delete User:
+/**Delete User we make the delete route to
+ be dynamic for both the Admin and the user : */
+
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(403, "You are not allowed to delete this user");
   }
   try {
