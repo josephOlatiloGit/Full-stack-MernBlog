@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
 import DashPosts from "../components/DashPosts";
+import DashUsers from "../components/DashUsers";
 
 /**
  * To identify the current tab we use useLocation hook
@@ -31,6 +32,8 @@ export default function Dashboard() {
       {tab === "profile" && <DashProfile />}
       {/* post... */}
       {tab === "post" && <DashPosts />}
+      {/* users */}
+      {tab === "users" && <DashUsers />}
     </div>
   );
 }
