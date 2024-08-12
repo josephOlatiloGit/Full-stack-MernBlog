@@ -17,7 +17,7 @@ export const verifyToken = (req, res, next) => {
     }
     req.user = user;
     next();
-    
+
     /**
      * if the token is valid, then we
      * wanna send the user req along with the body.
