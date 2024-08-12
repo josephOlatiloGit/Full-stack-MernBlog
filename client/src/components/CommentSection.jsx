@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Alert, Button, Textarea } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Comments from "./Comments";
+
 /**
  *We want to make sure that it only sign in user that 
  can comment on a post so we with  useSelector we get the id of a sign in user. 
  * YOu notice that when we click on the username link on in the comment section the page load the bottom of the profile page. so to fix that we create a component called ScrollTo top .
+ .Here in the comment section, we also create a function to make request to the LikeComment api. Then we pass it as a prop to the Comment component.
  */
 
 export default function CommentSection({ postId }) {
@@ -14,7 +16,8 @@ export default function CommentSection({ postId }) {
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-  console.log(comments);
+  const navigate = useNavigate();
+  // console.log(comments);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +65,34 @@ export default function CommentSection({ postId }) {
     };
     getComments();
   }, [postId]);
+
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(`/api/comment/likesComment/${commentId}`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -126,7 +157,7 @@ export default function CommentSection({ postId }) {
           </div>
         )}
         {comments.map((comment) => (
-          <Comments key={comment._id} comment={comment} />
+          <Comments key={comment._id} comment={comment} onLike={handleLike} />
         ))}
       </>
     </div>

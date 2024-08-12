@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { FaThumbsUp } from "react-icons/fa";
+import { useSelector } from "react-redux";
 /**
  * We need to create a public user api to fetch the comment userId
  *
  */
-export default function Comments({ comment }) {
+export default function Comments({ comment, onLike }) {
   const [user, setUser] = useState({});
-  console.log(user);
+  const { currentUser } = useSelector((state) => state.user);
+  // console.log(user);
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -31,7 +34,8 @@ export default function Comments({ comment }) {
           alt={user.username}
         />
       </div>
-      {/* To show the time of comment we use a package called moment */}
+      {/* To show the time of comment we use a package called moment. 
+      We make the likes to be valid only by one click so to create an api to keep and update the likes count */}
       <div className=" flex-1">
         <div className=" flex items-center mb-1">
           <span className="font-bold text-xs truncate">
@@ -42,6 +46,26 @@ export default function Comments({ comment }) {
           </span>
         </div>
         <p className="text-gray-500 mb-2">{comment.content}</p>
+        <div className="flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
+          <button
+            type="button"
+            onClick={() => onLike(comment._id)}
+            className={`text-gray400 hover:text-blue-500 
+              ${
+                currentUser &&
+                comment.likes.includes(currentUser._id) &&
+                `!text-blue-500`
+              } `}
+          >
+            <FaThumbsUp className="text-sm" />
+          </button>
+          <p className="text-gray-400">
+            {comment.numberOfLikes > 0 &&
+              comment.numberOfLikes +
+                " " +
+                (comment.numberOfLikes === 1 ? "Like" : "Likes")}
+          </p>
+        </div>
       </div>
     </div>
   );
