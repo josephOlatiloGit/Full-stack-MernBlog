@@ -22,3 +22,18 @@ export const createComment = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * we get all the comment by the postId
+ * then we sort the comment by the newest one
+ */
+export const getPostComments = async (req, res, next) => {
+  try {
+    const comments = await Comment.find({ postId: req.params.postId }).sort({
+      createdAt: -1,
+    });
+    return res.status(200).json(comments);
+  } catch (error) {
+    next(error);
+  }
+};
