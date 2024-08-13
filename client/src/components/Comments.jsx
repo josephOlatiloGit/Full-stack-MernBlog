@@ -8,7 +8,7 @@ import { Button, Textarea } from "flowbite-react";
  * We need to create a public user api to fetch the comment userId
  * We need to create a piece of state to manage the editComment functionality.
  */
-export default function Comments({ comment, onLike, onEdit }) {
+export default function Comments({ comment, onLike, onEdit, onDelete }) {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -64,6 +64,7 @@ export default function Comments({ comment, onLike, onEdit }) {
       </div>
       {/* To show the time of comment we use a package called moment. 
       We make the likes to be valid only by one click so to create an api to keep and update the likes count */}
+
       <div className=" flex-1">
         <div className=" flex items-center mb-1">
           <span className="font-bold text-xs truncate">
@@ -124,13 +125,22 @@ export default function Comments({ comment, onLike, onEdit }) {
               </p>
               {currentUser &&
                 (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-blue-500"
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-blue-500"
+                      onClick={handleEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-red-500"
+                      onClick={() => onDelete(comment._id)}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>
