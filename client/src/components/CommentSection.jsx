@@ -94,6 +94,18 @@ export default function CommentSection({ postId }) {
     }
   };
 
+  /**We create the comment edit function
+   * and the pass the two state:  comment
+   * and editedContent as prop. Then we pass the function to the Comment component. */
+
+  const handleEdit = async (comment, editedContent) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, content: editedContent } : c
+      )
+    );
+  };
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -157,7 +169,12 @@ export default function CommentSection({ postId }) {
           </div>
         )}
         {comments.map((comment) => (
-          <Comments key={comment._id} comment={comment} onLike={handleLike} />
+          <Comments
+            key={comment._id}
+            comment={comment}
+            onLike={handleLike}
+            onEdit={handleEdit}
+          />
         ))}
       </>
     </div>
