@@ -5,6 +5,7 @@ import DashProfile from "../components/DashProfile";
 import DashPosts from "../components/DashPosts";
 import DashUsers from "../components/DashUsers";
 import DashComments from "../components/DashComments";
+import DashboardComp from "../components/DashboardComp";
 
 /**
  * To identify the current tab we use useLocation hook
@@ -35,8 +36,10 @@ export default function Dashboard() {
       {tab === "post" && <DashPosts />}
       {/* users */}
       {tab === "users" && <DashUsers />}
-      {/* COmments */}
+      {/* comments */}
       {tab === "comments" && <DashComments />}
+      {/* dashboard */}
+      {tab === "dash" && <DashboardComp />}
     </div>
   );
 }
