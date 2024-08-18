@@ -78,7 +78,7 @@ export default function Header() {
         className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
       >
         <span className="px-2 p-y-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
-          TobildCode{" "}
+          TobildCode
         </span>
         Blog
       </Link>
@@ -92,13 +92,16 @@ export default function Header() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
-      <Button className="w-12 h-10 lg:hidden" color={"gray"} pill>
-        <AiOutlineSearch />
-      </Button>
-      <div className="flex md:order-2 gap-4">
+      <Link to={"/search"}>
+        <Button className="w-12 h-10 hidden lg:hidden" color={"gray"} pill>
+          <AiOutlineSearch />
+        </Button>
+      </Link>
+
+      <div className="flex items-center  md:order-2 gap-4">
         {/* /**Set order to 2 in large screen */}
         <Button
-          className="w-12 h-10 hidden sm:inline"
+          className="w-8 h-8  mr-1  sm:inline sm:w-12 sm:h-10 "
           color={"gray"}
           pill
           onClick={() => dispatch(toggleTheme())}
@@ -145,6 +148,13 @@ export default function Header() {
         </Navbar.Link>
         <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to={"/projects"}>Projects</Link>
+        </Navbar.Link>
+        <Navbar.Link
+          active={path === "/search"}
+          as={"div"}
+          className="sm:hidden"
+        >
+          <Link to={"/search"}>Search</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
