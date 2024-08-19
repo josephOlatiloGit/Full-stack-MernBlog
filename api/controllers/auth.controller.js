@@ -60,7 +60,7 @@ export const signin = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("access_token", token, { httpOnly: true, maxAge: 360000 })
+      .cookie("access_token", token, { httpOnly: true })
       .json(rest);
   } catch (error) {
     next(error);
@@ -82,7 +82,6 @@ export const google = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          maxAge: 36000,
         })
         .json(rest);
     } else {
@@ -115,7 +114,6 @@ export const google = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          maxAge: 36000,
         })
         .json(rest);
     }
