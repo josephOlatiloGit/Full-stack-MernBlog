@@ -7,6 +7,9 @@ import postRoutes from "./routes/post.route.js";
 import commentRoutes from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
+
+const __dirname = path.resolve();
 
 const app = express();
 dotenv.config();
@@ -30,6 +33,17 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
+
+/**
+ * Create the static file for the client side pages.
+ * NOTE: If your are using vite you make use of dist, but if your are using create react app you will use build.
+ */
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+// So whatever else the path is we want to res with the file name and call the index.html:
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 // error middleware
 app.use((err, req, res, next) => {

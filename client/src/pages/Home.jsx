@@ -6,7 +6,6 @@ import { Button } from "flowbite-react";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
-  console.log(posts);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,10 +26,10 @@ export default function Home() {
     <div className="">
       <div className="flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold lg:text-6xl">Welcome to my Blog</h1>
-        <p className="text-gray-500 text-xs sm:text-sm">
-          Here you'will find a variety of articles and tutorials on topics such
-          ad web development, software engineering, code review, debugging and
-          programming languages.
+        <p className="text-gray-500 text-sm sm:text-xl">
+          We provide a range of articles and tutorials on web development,
+          software engineering, code review, debugging, and programming
+          languages.
         </p>
         <Link
           to={"/search"}
