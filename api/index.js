@@ -9,13 +9,14 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 
-const app = express();
 const __dirname = path.resolve();
+const app = express();
 
 dotenv.config();
 
 app.use(cookieParser());
 app.use(express.json());
+
 app.use(cors());
 
 mongoose
