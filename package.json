@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-    "build": "npm install && npm run build --prefix client && npm start"
+    "build": "npm install --prefix client && npm run build --prefix client && npm start"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
-    "express": "^4.19.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
