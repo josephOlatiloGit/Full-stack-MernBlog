@@ -9,9 +9,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
 
+const app = express();
 const __dirname = path.resolve();
 
-const app = express();
 dotenv.config();
 
 app.use(cookieParser());
@@ -40,7 +40,8 @@ app.use("/api/comment", commentRoutes);
  */
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
-// So whatever else the path is we want to res with the file name and call the index.html:
+// So whatever page that is not part of initial route path then we want to res with the file name and call the index.html:
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
