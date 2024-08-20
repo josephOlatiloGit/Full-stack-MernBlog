@@ -1,13 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
 import commentRoutes from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import path from "path";
+import dotenv from "dotenv";
+import cors from "cors";
 
 const __dirname = path.resolve();
 
@@ -47,7 +47,6 @@ app.use(express.static(path.join(__dirname, "/client/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
-
 // error middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
