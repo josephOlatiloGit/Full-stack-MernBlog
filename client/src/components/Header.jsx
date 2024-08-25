@@ -122,7 +122,7 @@ export default function Header() {
                 {currentUser.email}
               </span>
             </DropdownHeader>
-            <Link to={"/dashboard?tab=profilePicture"}>
+            <Link to={"/dashboard?tab=profile"}>
               <DropdownItem>Profile</DropdownItem>
             </Link>
             <DropdownDivider />
